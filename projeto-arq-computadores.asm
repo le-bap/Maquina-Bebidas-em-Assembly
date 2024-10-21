@@ -10,43 +10,54 @@ org 0030h
 ; Escritas do LCD
 BemVindo:
   DB "Bem vindo!"
-  DB 00h ; Marca null no fim da String
+  DB 00h
 Escolha:
   DB "Escolha a bebida"
-  DB 00h ; Marca null no fim da String
+  DB 00h
 Agua:
   DB "1 - Agua"
-  DB 00h ; Marca null no fim da String
+  DB 00h
 CocaCola:
   DB "2 - Coca Cola"
-  DB 00h ; Marca null no fim da String
+  DB 00h
 Cha:
   DB "3 - Chá Mate"
-  DB 00h ; Marca null no fim da String
+  DB 00h 
 Suco:
   DB "4 - Suco"
-  DB 00h ; Marca null no fim da String
+  DB 00h 
 Digite:
-  DB "Digite o numero"
-  DB 00h ; Marca null no fim da String
+  DB "Faca seu pedido"
+  DB 00h
+Aguarde:
+  DB "So mais uns"
+  DB 00h 
+Segundos:
+  DB "segundos...""
+
 
 ; Mensagens de preparação
 PreparandoAgua:
-  DB "Preparando Agua..."
+  DB "Preparando Agua"
   DB 00h
 PreparandoCocaCola:
-  DB "Preparando Coca Cola..."
+  DB "Preparando Coca"
   DB 00h
 PreparandoCha:
-  DB "Preparando Chá Mate..."
+  DB "Preparando Chá "
   DB 00h
 PreparandoSuco:
-  DB "Preparando Suco..."
+  DB "Preparando Suco"
   DB 00h
 
 ; MAIN
 org 0100h
 START:
+	;configurando teclado
+	MOV 48H, #'4'
+	MOV 49H, #'3'
+	MOV 4AH, #'2'
+	MOV 4BH, #'1'
     ; Inicializa o LCD e escreve mensagem inicial
     ACALL lcd_init
     MOV A, #00h
@@ -69,8 +80,7 @@ START:
     ACALL posicionaCursor
     MOV DPTR, #CocaCola
     ACALL escreveStringROM
-    ACALL clearDisplay
-    ACALL lcd_init
+	ACALL clearDisplay	
     MOV A, #00h
     ACALL posicionaCursor
     MOV DPTR, #Cha
@@ -80,19 +90,18 @@ START:
     MOV DPTR, #Suco
     ACALL escreveStringROM
     ACALL clearDisplay
-    ACALL lcd_init
     MOV A, #00h
     ACALL posicionaCursor
     MOV DPTR, #Digite
     ACALL escreveStringROM
 
-    ; Loop principal para escolha da bebida
+    ; loop principal para escolha da bebida
 ROTINA:
     ACALL leituraTeclado      ; Ler o teclado matricial
     JNB F0, ROTINA            ; Se nenhuma tecla foi pressionada, continua verificando
 
     ; Verifica qual número foi pressionado
-    CJNE R0, #0Bh, check2     ; Se for '1', pula para Coca-Cola
+    CJNE R0, #0Bh, check2     ; Se for '1', pula para Agua
     MOV DPTR, #PreparandoAgua
     ACALL exibePreparacao
     SJMP ROTINA
@@ -123,7 +132,16 @@ exibePreparacao:
     MOV A, #00h              ; Define a posição do cursor
     ACALL posicionaCursor
     ACALL escreveStringROM   ; Escreve a string que está em DPTR no LCD
-    RET
+    ACALL clearDisplay
+	MOV A, #00h
+    ACALL posicionaCursor
+    MOV DPTR, #Aguarde
+    ACALL escreveStringROM
+	MOV A, #40h
+    ACALL posicionaCursor
+    MOV DPTR, #Segundos
+    ACALL escreveStringROM
+	RET
 
 ; Funções do LCD
 escreveStringROM:
@@ -263,56 +281,46 @@ delay:
 
 ; Funções do teclado matricial
 leituraTeclado:
-    MOV P0, #0F0h        ; Configura as linhas como saída (P0.4 a P0.7)
-    NOP                  ; Pequeno atraso
-    MOV A, P0            ; Lê as colunas (P0.0 a P0.3)
-    ANL A, #0F0h         ; Verifica se alguma tecla foi pressionada
-    JZ semTecla          ; Se não houver tecla pressionada, pula para semTecla
-    
-    MOV P0, #0FEh        ; Ativa a linha 1
-    MOV A, P0
-    ANL A, #0F0h
-    CJNE A, #0F0h, tecla1
-    
-    MOV P0, #0FDh        ; Ativa a linha 2
-    MOV A, P0
-    ANL A, #0F0h
-    CJNE A, #0F0h, tecla2
-    
-    MOV P0, #0FBh        ; Ativa a linha 3
-    MOV A, P0
-    ANL A, #0F0h
-    CJNE A, #0F0h, tecla3
-    
-    MOV P0, #0F7h        ; Ativa a linha 4
-    MOV A, P0
-    ANL A, #0F0h
-    CJNE A, #0F0h, tecla4
+	MOV R0, #0			; clear R0 - the first key is key0
 
-    SJMP semTecla        ; Sem tecla pressionada
+	; scan row0
+	MOV P0, #0FFh	
+	CLR P0.0			; clear row0
+	CALL colScan		; call column-scan subroutine
+	JB F0, finish		; | if F0 is set, jump to end of program 
+						; | (because the pressed key was found and its number is in  R0)
+	; scan row1
+	SETB P0.0			; set row0
+	CLR P0.1			; clear row1
+	CALL colScan		; call column-scan subroutine
+	JB F0, finish		; | if F0 is set, jump to end of program 
+						; | (because the pressed key was found and its number is in  R0)
+	; scan row2
+	SETB P0.1			; set row1
+	CLR P0.2			; clear row2
+	CALL colScan		; call column-scan subroutine
+	JB F0, finish		; | if F0 is set, jump to end of program 
+						; | (because the pressed key was found and its number is in  R0)
+	; scan row3
+	SETB P0.2			; set row2
+	CLR P0.3			; clear row3
+	CALL colScan		; call column-scan subroutine
+	JB F0, finish		; | if F0 is set, jump to end of program 
+						; | (because the pressed key was found and its number is in  R0)
+finish:
+	RET
 
-tecla1:
-    MOV R0, #0Bh         ; Tecla '1'
-    SETB F0              ; Indica que uma tecla foi pressionada
-    RET
-
-tecla2:
-    MOV R0, #0Ah         ; Tecla '2'
-    SETB F0
-    RET
-
-tecla3:
-    MOV R0, #09h         ; Tecla '3'
-    SETB F0
-    RET
-
-tecla4:
-    MOV R0, #08h         ; Tecla '4'
-    SETB F0
-    RET
-
-semTecla:
-    CLR F0               ; Nenhuma tecla pressionada
-    RET
+; column-scan subroutine
+colScan:
+	JNB P0.4, gotKey	; if col0 is cleared - key found
+	INC R0				; otherwise move to next key
+	JNB P0.5, gotKey	; if col1 is cleared - key found
+	INC R0				; otherwise move to next key
+	JNB P0.6, gotKey	; if col2 is cleared - key found
+	INC R0				; otherwise move to next key
+	RET					; return from subroutine - key not found
+gotKey:
+	SETB F0				; key found - set F0
+	RET
 
 end
