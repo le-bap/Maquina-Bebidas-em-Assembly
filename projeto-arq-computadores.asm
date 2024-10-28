@@ -29,11 +29,7 @@ Suco:
 Digite:
   DB "Faca seu pedido"
   DB 00h
-Aguarde:
-  DB "So mais uns"
-  DB 00h 
-Segundos:
-  DB "segundos...""
+
 
 
 ; Mensagens de preparação
@@ -135,11 +131,6 @@ exibePreparacao:
     ACALL clearDisplay
 	MOV A, #00h
     ACALL posicionaCursor
-    MOV DPTR, #Aguarde
-    ACALL escreveStringROM
-	MOV A, #40h
-    ACALL posicionaCursor
-    MOV DPTR, #Segundos
     ACALL escreveStringROM
 	RET
 
