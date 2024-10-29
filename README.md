@@ -1,4 +1,4 @@
-# Cafeteria-em-Assembly
+# Maquina-de-Bebidas-em-Assembly
 
 ### Letizia L. Baptistella RA 24.123.031-7 
 ### Rafaela Altheman de Campos RA 24.123.010-1
