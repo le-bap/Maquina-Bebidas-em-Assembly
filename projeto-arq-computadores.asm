@@ -6,6 +6,9 @@ org 0000h
     LJMP START
 
 org 0030h
+; Para display de 7 segmentos
+segmentos:
+    DB 0C0h, 0F9h, 0A4h, 0B0h, 99h, 92h, 82h, 0F8h, 80h, 90h ; Valores hexadecimais para 7 segmentos de 0 a 9
 
 ; Escritas do LCD
 BemVindo:
@@ -128,10 +131,26 @@ exibePreparacao:
     MOV A, #00h              ; Define a posição do cursor
     ACALL posicionaCursor
     ACALL escreveStringROM   ; Escreve a string que está em DPTR no LCD
-    ACALL clearDisplay
-	MOV A, #00h
-    ACALL posicionaCursor
-    ACALL escreveStringROM
+
+; rotinas para contagem regressiva
+	start2:
+	MOV R2, #10
+	ROT:
+	MOV A, R2
+	DEC A
+	CALL DEC7SEG ; Chama a subrotina DEC7SEG
+	CALL delay2 ; Chama a subrotina delay
+	CALL delay2
+	DJNZ R2, ROT
+	JMP start2 ; Salta para o start
+	delay2:
+	MOV R0, #250
+	DJNZ R0, $
+	RET
+	DEC7SEG:
+	MOV DPTR,#segmentos ;DPTR = início da tabela de códigos
+	MOVC A,@A+DPTR ;lê a tabela da memória de programa
+	MOV P1,A
 	RET
 
 ; Funções do LCD
