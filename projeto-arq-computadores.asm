@@ -49,6 +49,12 @@ PreparandoSuco:
   DB "Preparando Suco"
   DB 00h
 
+
+;Mensagem de pronto
+BebidaPronta:
+	DB "Bebida Pronta!"
+	DB 00h
+
 ; MAIN
 org 0100h
 START:
@@ -130,8 +136,9 @@ exibePreparacao:
     ACALL clearDisplay       ; Limpa o LCD
     MOV A, #00h              ; Define a posição do cursor
     ACALL posicionaCursor
-    ACALL escreveStringROM   ; Escreve a string que está em DPTR no LCD
-
+    ACALL escreveStringROM
+   	ACALL delay
+		ACALL clearDisplay
 ; rotinas para contagem regressiva
 	start2:
 	MOV R2, #10
@@ -142,7 +149,11 @@ exibePreparacao:
 	CALL delay2 ; Chama a subrotina delay
 	CALL delay2
 	DJNZ R2, ROT
-	JMP start2 ; Salta para o start
+	ACALL clearDisplay
+	MOV A, #00h
+	ACALL posicionaCursor 
+	MOV DPTR, #BebidaPronta
+	ACALL escreveStringROM
 	delay2:
 	MOV R0, #250
 	DJNZ R0, $
