@@ -11,19 +11,19 @@ O trabalho foi desenvolvimento pensando em utilizar e dinamizar o maior numero d
 
 Para utilizar a maquina de bebidas, ao rodar o programa, um menu das bebidas disponiveis aparece para o cliente. As opções são: água, suco, chá mate e Coca-Cola.
 
-1- Tela de Inicio do programa
+1- Tela de Inicio do programa:
 
 ![image](https://github.com/user-attachments/assets/190f6ef7-d471-4b73-b2ec-ebb5d547f2cb)
 
-2- Primeiras opções de bebidas
+2- Primeiras opções de bebidas:
 
 ![image](https://github.com/user-attachments/assets/1ec21d92-679c-4005-8326-a7b92bab9e6f)
 
-3- Outras opções de bebidas
+3- Outras opções de bebidas:
 
 ![image](https://github.com/user-attachments/assets/2b0a8490-da22-43a1-a37b-40a8626220fe)
 
-4- Nesse momento o usuario deve escolher no teclado matricial a bebida que ele deseja
+4- Nesse momento o usuario deve escolher no teclado matricial a bebida que ele deseja:
 
 ![image](https://github.com/user-attachments/assets/bbb987e1-3db4-4570-b286-d865f68e84a0)
 
@@ -33,6 +33,9 @@ Para utilizar a maquina de bebidas, ao rodar o programa, um menu das bebidas dis
 
 6- Após isso, o display de 7 segmentos faz uma contagem regressiva para a bebida ficar pronta:
 
+<video width="320" height="240" controls>
+  <source src="display7seg.mp4" type="video/mp4">
+</video
 
 7- Assim que finalizada, o LCD informa que a preparação acabou
-
+![image](lcd-bebida-pronta.png)
