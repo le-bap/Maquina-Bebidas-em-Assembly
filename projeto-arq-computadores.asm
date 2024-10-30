@@ -132,37 +132,95 @@ check4:
     SJMP $                   ; Loop infinito
 
 ; Função para exibir mensagem de preparação
+MOVIMENTO_AGUA      EQU 5  
+MOVIMENTO_COCA      EQU 10  
+MOVIMENTO_CHA       EQU 15  
+MOVIMENTO_SUCO      EQU 20  
+
 exibePreparacao:
-    ACALL clearDisplay       ; Limpa o LCD
-    MOV A, #00h              ; Define a posição do cursor
+    ACALL clearDisplay          ; Limpa o LCD
+    MOV A, #00h                 ; Define a posição do cursor
     ACALL posicionaCursor
     ACALL escreveStringROM
-   	ACALL delay
-		ACALL clearDisplay
-; rotinas para contagem regressiva
-	start2:
-	MOV R2, #10
-	ROT:
-	MOV A, R2
-	DEC A
-	CALL DEC7SEG ; Chama a subrotina DEC7SEG
-	CALL delay2 ; Chama a subrotina delay
-	CALL delay2
-	DJNZ R2, ROT
-	ACALL clearDisplay
-	MOV A, #00h
-	ACALL posicionaCursor 
-	MOV DPTR, #BebidaPronta
-	ACALL escreveStringROM
-	delay2:
-	MOV R0, #250
-	DJNZ R0, $
-	RET
-	DEC7SEG:
-	MOV DPTR,#segmentos ;DPTR = início da tabela de códigos
-	MOVC A,@A+DPTR ;lê a tabela da memória de programa
-	MOV P1,A
-	RET
+    ACALL delay
+    ACALL clearDisplay
+
+    ; Seleciona o movimento do motor com base na bebida escolhida
+    MOV A, DPH                  
+    
+    ; Verifica se é a bebida "Água"
+    MOV DPTR, #PreparandoAgua
+    CJNE A, DPH, verificaCocaCola 
+    MOV A, DPL                  
+    CJNE A, DPL, verificaCocaCola 
+    MOV R7, #MOVIMENTO_AGUA      ; Define o movimento do motor para água
+    SJMP iniciaMovimentoMotor
+
+verificaCocaCola:
+    ; Verifica se é a bebida "Coca-Cola"
+    MOV DPTR, #PreparandoCocaCola
+    CJNE A, DPH, verificaCha       
+    MOV A, DPL                     
+    CJNE A, DPL, verificaCha       
+    MOV R7, #MOVIMENTO_COCA        ; Define o movimento do motor para Coca-Cola
+    SJMP iniciaMovimentoMotor
+
+verificaCha:
+    ; Verifica se é a bebida "Chá"
+    MOV DPTR, #PreparandoCha
+    CJNE A, DPH, verificaSuco       
+    MOV A, DPL                      
+    CJNE A, DPL, verificaSuco       
+    MOV R7, #MOVIMENTO_CHA          ; Define o movimento do motor para chá
+    SJMP iniciaMovimentoMotor
+
+verificaSuco:
+    ; Assume que é "Suco" caso nenhuma das condições anteriores seja atendida
+    MOV R7, #MOVIMENTO_SUCO         ; Define o movimento do motor para suco
+
+iniciaMovimentoMotor:
+    ; Configuração e ativação do motor
+    MOV TMOD, #01100000b           
+    SETB EA                        
+    SETB ET1                       
+    SETB TR1                       
+    SETB P3.0                      ; Ativa o motor
+    CLR P3.1                       ; Define a direção inicial do motor
+
+    ; Executa o movimento do motor durante a contagem regressiva
+start2:
+    MOV R2, #10                    ; Inicializa a contagem de 10 segundos
+ROT:
+    MOV A, R2
+    DEC A
+    CALL DEC7SEG                   ; Exibe o valor no display de 7 segmentos
+    CALL delay2                    ; Delay para manter o contador
+    CALL delay2
+    DJNZ R2, ROT                   ; Continua até a contagem chegar a zero
+
+    ; Parada do motor após a contagem regressiva
+    CLR TR1                        ; Para o Timer 1
+    CLR P3.0                       ; Desativa o motor
+    ACALL clearDisplay
+    MOV A, #00h
+    ACALL posicionaCursor
+    MOV DPTR, #BebidaPronta
+    ACALL escreveStringROM
+    RET
+
+delay2:
+    MOV R0, #250
+    DJNZ R0, $
+    RET
+
+DEC7SEG:
+    MOV DPTR,#segmentos           ; DPTR aponta para a tabela de segmentos
+    MOVC A,@A+DPTR                ; Lê o valor do segmento correspondente
+    MOV P1,A
+    RET
+
+
+
 
 ; Funções do LCD
 escreveStringROM:
