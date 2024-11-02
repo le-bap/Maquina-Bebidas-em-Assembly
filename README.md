@@ -33,9 +33,72 @@ Para utilizar a maquina de bebidas, ao rodar o programa, um menu das bebidas dis
 
 6- Após isso, o display de 7 segmentos faz uma contagem regressiva para a bebida ficar pronta:
 
-<video width="320" height="240" controls>
-  <source src="display7seg.mp4" type="video/mp4">
-</video
-
 7- Assim que finalizada, o LCD informa que a preparação acabou
+
 ![image](lcd-bebida-pronta.png)
+
+
+Vídeo do funcionamento completo do projeto:
+
+[(https://youtu.be/OLv1d73Ig_A)]
+
+# Fluxograma e explicação do código:
+
+PDF fluxograma:
+
+[Fluxogramas.pdf](https://github.com/user-attachments/files/17607107/Fluxogramas.pdf)
+
+Explicação do código:
+
+Resumindo as funções e sub-rotinas:
+
+1. Mensagem na memória ROM:
+   
+  --> Declaramos mensagens que serão exibidas no LCD, como "Bem-vindo!", "Escolha sua bebida"...
+  
+  --> Terminamos cada uma com 00h para indicar o final da string
+
+3. Função Start:
+   
+  --> A função start configura o teclado com valores específicos para as teclas e inicializa o LCD, exibindo as mensagens de boas-vindas e opções de bebidas disponíveis.
+
+5. Sub-rotina Rotina:
+   
+  --> Nessa sub-rotina é necessário ler o teclado e identificar a tecla pressionada.
+  
+  --> Dependendo da tecla que foi pressionada, sendo as opções 1,2,3,4, a máquina prepara a bebida correspondente, exibe uma mensagem e inicia o movimento do motor.
+
+7. A sub-rotina exibePreparacao:
+   
+  --> exibe a mensagem de preparação da bebida escolhida e seleciona o movimento do motor com base na bebida;
+
+9. A sub-rotina start2:
+    
+  --> inicia uma contagem regressiva de 10 segundos, exibindo cada número no display de 7 segmentos.
+  
+  --> Após a contagem, o motor é desligado e a mensagem "Bebida Pronta!" é exibida no LCD.
+
+11. Sub-rotinas auxiliares (vistas em aula):
+    
+  --> escreveStringROM
+  
+  --> lcd_init
+  
+  --> sendCharacter
+  
+  --> posicionaCursor
+  
+  --> clearDisplay
+
+13. A sub-rotina leituraTeclado:
+    
+  --> A sub-rotina leituraTeclado verifica cada linha do teclado matricial, chamando colScan para detectar qual é a coluna.
+
+14. Sub-rotina colScan:
+
+  --> Verifica nas colunas do teclado para identificar qual tecla foi pressionada.
+
+15. Funções de Delay:
+
+  --> São implementadas várias funções de delay (delay, delay2) para garantir que as operações no display e os tempos de movimentação do motor aconteçam corretamente.
+
