@@ -31,7 +31,7 @@ Para utilizar a maquina de bebidas, ao rodar o programa, um menu das bebidas dis
 
 ![image](https://github.com/user-attachments/assets/ad7989b9-54ae-4b9f-9c59-24c96931be68)
 
-6- Após isso, o display de 7 segmentos faz uma contagem regressiva para a bebida ficar pronta:
+6- Após isso, o display de 7 segmentos faz uma contagem regressiva para a bebida ficar pronta enquanto o motor gira (ver vídeo do funcionamento do programa)
 
 7- Assim que finalizada, o LCD informa que a preparação acabou
 
@@ -54,9 +54,9 @@ Resumindo as funções e sub-rotinas:
 
 1. Mensagem na memória ROM:
    
-  --> Declaramos mensagens que serão exibidas no LCD, como "Bem-vindo!", "Escolha sua bebida"...
+  --> Declaramos mensagens que serão exibidas no LCD, como "Bem-vindo!", "Escolha sua bebida"...;
   
-  --> Terminamos cada uma com 00h para indicar o final da string
+  --> Terminamos cada uma com 00h para indicar o final da string.
 
 3. Função Start:
    
@@ -64,17 +64,17 @@ Resumindo as funções e sub-rotinas:
 
 5. Sub-rotina Rotina:
    
-  --> Nessa sub-rotina é necessário ler o teclado e identificar a tecla pressionada.
+  --> Nessa sub-rotina é necessário ler o teclado e identificar a tecla pressionada;
   
   --> Dependendo da tecla que foi pressionada, sendo as opções 1,2,3,4, a máquina prepara a bebida correspondente, exibe uma mensagem e inicia o movimento do motor.
 
-7. A sub-rotina exibePreparacao:
+7. Sub-rotina exibePreparacao:
    
-  --> exibe a mensagem de preparação da bebida escolhida e seleciona o movimento do motor com base na bebida;
+  --> Exibe a mensagem de preparação da bebida escolhida e seleciona o movimento do motor com base na bebida.
 
-9. A sub-rotina start2:
+9. Sub-rotina start2:
     
-  --> inicia uma contagem regressiva de 10 segundos, exibindo cada número no display de 7 segmentos.
+  --> Inicia uma contagem regressiva de 10 segundos, exibindo cada número no display de 7 segmentos;
   
   --> Após a contagem, o motor é desligado e a mensagem "Bebida Pronta!" é exibida no LCD.
 
@@ -90,15 +90,15 @@ Resumindo as funções e sub-rotinas:
   
   --> clearDisplay
 
-13. A sub-rotina leituraTeclado:
+13. Sub-rotina leituraTeclado:
     
-  --> A sub-rotina leituraTeclado verifica cada linha do teclado matricial, chamando colScan para detectar qual é a coluna.
+  --> Verifica cada linha do teclado matricial, chamando colScan para detectar qual é a coluna.
 
 14. Sub-rotina colScan:
 
   --> Verifica nas colunas do teclado para identificar qual tecla foi pressionada.
 
-15. Funções de Delay:
+15. Sub-rotinas de Delay:
 
   --> São implementadas várias funções de delay (delay, delay2) para garantir que as operações no display e os tempos de movimentação do motor aconteçam corretamente.
 
