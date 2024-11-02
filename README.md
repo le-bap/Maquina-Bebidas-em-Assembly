@@ -58,27 +58,27 @@ Resumindo as funções e sub-rotinas:
   
   --> Terminamos cada uma com 00h para indicar o final da string.
 
-3. Função Start:
+2. Função Start:
    
   --> A função start configura o teclado com valores específicos para as teclas e inicializa o LCD, exibindo as mensagens de boas-vindas e opções de bebidas disponíveis.
 
-5. Sub-rotina Rotina:
+3. Sub-rotina Rotina:
    
   --> Nessa sub-rotina é necessário ler o teclado e identificar a tecla pressionada;
   
   --> Dependendo da tecla que foi pressionada, sendo as opções 1,2,3,4, a máquina prepara a bebida correspondente, exibe uma mensagem e inicia o movimento do motor.
 
-7. Sub-rotina exibePreparacao:
+4. Sub-rotina exibePreparacao:
    
   --> Exibe a mensagem de preparação da bebida escolhida e seleciona o movimento do motor com base na bebida.
 
-9. Sub-rotina start2:
+5. Sub-rotina start2:
     
   --> Inicia uma contagem regressiva de 10 segundos, exibindo cada número no display de 7 segmentos;
   
   --> Após a contagem, o motor é desligado e a mensagem "Bebida Pronta!" é exibida no LCD.
 
-11. Sub-rotinas auxiliares (vistas em aula):
+6. Sub-rotinas auxiliares (vistas em aula):
     
   --> escreveStringROM
   
@@ -90,15 +90,15 @@ Resumindo as funções e sub-rotinas:
   
   --> clearDisplay
 
-13. Sub-rotina leituraTeclado:
+7. Sub-rotina leituraTeclado:
     
   --> Verifica cada linha do teclado matricial, chamando colScan para detectar qual é a coluna.
 
-14. Sub-rotina colScan:
+8. Sub-rotina colScan:
 
   --> Verifica nas colunas do teclado para identificar qual tecla foi pressionada.
 
-15. Sub-rotinas de Delay:
+9. Sub-rotinas de Delay:
 
   --> São implementadas várias funções de delay (delay, delay2) para garantir que as operações no display e os tempos de movimentação do motor aconteçam corretamente.
 
